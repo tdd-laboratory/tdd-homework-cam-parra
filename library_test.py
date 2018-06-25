@@ -9,7 +9,8 @@ Western Hemisphere. (The Fourth of July didn't see regular celebration in the
 US until 15-20 years later.) It is celebrated by 77.9% of the population--
 trending toward 80.                                                                
 '''
-
+# really? Why are you writing python code you three year old
+BIRTHDAY = '''I was born on 2015-07-25.'''
 class TestCase(unittest.TestCase):
 
     # Helper function
@@ -29,7 +30,50 @@ class TestCase(unittest.TestCase):
     # Third unit test; prove that if we look for integers where there are none, we get no results.
     def test_no_integers(self):
         self.assert_extract("no integers", library.integers)
+    
+    # Fourth unit test; prove that we can extract a date 
+    def test_birthday(self):
+        self.assert_extract(BIRTHDAY, library.dates_iso8601, '2015-07-25')
+
+    # Third unit test; prove that if we look for integers where there are none, we get no results.
+    def test_no_max_dates(self):
+        self.assert_extract("2013-13-32", library.dates_iso8601)
+
+    def test_dates_fmt2(self):
+        self.assert_extract('I was born on 25 Jan 2017.', library.dates_fmt2, '25 Jan 2017')
+
+
+    def test_date_long_fmt(self):
+        self.assert_extract('I was born on 25 January 2017.', library.dates_fmt2, '25 January 2017')
+
+    def test_date_american_order_fmt(self):
+        self.assert_extract('I was born on January 25 2017.', library.dates_fmt2, 'January 25 2017')
+
+    def test_date_ordinals_order_fmt(self):
+        self.assert_extract('I was born on January 25th 2017.', library.dates_fmt2, 'January 25th 2017')
+
+    def test_seperated_date(self):
+        self.assert_extract('I was born on January 25 of 2017.', library.dates_fmt2, 'January 25 2017')
+
+    def test_dates_with_time_stamps(self):
+        self.assert_extract("2018-06-22 18:22:19.123", library.dates_iso8601, "2018-06-22 18:22:19.123")
+
+    def test_dates_with_commas(self):
+        self.assert_extract("2018,06,22", library.dates_iso8601, "2018 06 22")
+
+    def test_dates_with_commas_american(self):
+        self.assert_extract("06,22,2018", library.dates_iso8601, "2018 06 22")
+
+    def test_date_with_comma_fmt(self):
+        self.assert_extract('I was born on Jan 25, 2017.', library.dates_fmt2, 'January 25, 2017')
+
+    def test_date_with_day_first(self):
+        self.assert_extract('I was born on 25 January 2017.', library.dates_fmt2, '25 January 2017')
+
+    def test_date_without_space(self):
+        self.assert_extract('I was born on Jan252017.', library.dates_fmt2, 'January 25 2017')
 
 
 if __name__ == '__main__':
     unittest.main()
+
